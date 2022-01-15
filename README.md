@@ -1,6 +1,6 @@
 # tiktok_clone_app
 
-A new Flutter project.
+Tik Tok Clone App with Getx and Firebase
 
 ## Getting Started
 
