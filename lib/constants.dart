@@ -4,13 +4,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone_app/controllers/auth_controller.dart';
 
+const pages = [
+  Text("Home Screen"),
+  Text("Search Screen"),
+  Text("Add Screen"),
+  Text("Message Screen"),
+  Text("Profile Screen"),
+];
+
 // * COLORS
 const backgroundColor = Colors.black;
 var buttonColor = Colors.red[400];
 const borderColor = Colors.grey;
 
 // * FIREBASE
-var firebasAuth = FirebaseAuth.instance;
+var firebaseAuth = FirebaseAuth.instance;
 var firebaseStorage = FirebaseStorage.instance;
 var firestore = FirebaseFirestore.instance;
 

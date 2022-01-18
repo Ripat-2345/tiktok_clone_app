@@ -6,13 +6,32 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone_app/constants.dart';
 import 'package:tiktok_clone_app/models/userModel.dart' as model;
+import 'package:tiktok_clone_app/views/screens/auth/login_screen.dart';
+import 'package:tiktok_clone_app/views/screens/home_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
+  late Rx<User?> _user;
   late Rx<File?> _pickedImage;
 
   File? get profilePhoto => _pickedImage.value;
+
+  @override
+  void onReady() {
+    super.onReady();
+    _user = Rx<User?>(firebaseAuth.currentUser);
+    _user.bindStream(firebaseAuth.authStateChanges());
+    ever(_user, _setInitialScreen);
+  }
+
+  _setInitialScreen(User? user) {
+    if (user == null) {
+      Get.offAll(LoginScreen());
+    } else {
+      Get.offAll(const HomeScreen());
+    }
+  }
 
   // * Pick an image
   void pickImage() async {
@@ -30,7 +49,7 @@ class AuthController extends GetxController {
     Reference ref = firebaseStorage
         .ref()
         .child("profilePics")
-        .child(firebasAuth.currentUser!.uid);
+        .child(firebaseAuth.currentUser!.uid);
 
     UploadTask uploadTask = ref.putFile(image);
     TaskSnapshot snap = await uploadTask;
@@ -48,7 +67,7 @@ class AuthController extends GetxController {
           password.isNotEmpty &&
           image != null) {
         // * Save out user to our auth and firebse firestore
-        UserCredential cred = await firebasAuth.createUserWithEmailAndPassword(
+        UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -78,8 +97,9 @@ class AuthController extends GetxController {
   void loginUser(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty && email.isEmail) {
-        await firebasAuth.signInWithEmailAndPassword(
+        await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
+        print("log success");
       } else {
         Get.snackbar("Error Loggin Account", "Please enter all of fiels");
       }
