@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone_app/constants.dart';
-import 'package:tiktok_clone_app/models/userModel.dart' as model;
+import 'package:tiktok_clone_app/models/user_model.dart' as model;
 import 'package:tiktok_clone_app/views/screens/auth/login_screen.dart';
 import 'package:tiktok_clone_app/views/screens/home_screen.dart';
 
