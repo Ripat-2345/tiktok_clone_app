@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone_app/constants.dart';
 import 'package:tiktok_clone_app/models/video_model.dart';
+import 'package:tiktok_clone_app/views/screens/home_screen.dart';
 import 'package:video_compress/video_compress.dart';
 
 class UploadVideoController extends GetxController {
@@ -19,8 +22,7 @@ class UploadVideoController extends GetxController {
   // * Upload video to storage in firebase
   Future<String> _uploadVideoToStorage(String id, String videoPath) async {
     Reference ref = firebaseStorage.ref().child("videos").child(id);
-
-    UploadTask uploadTask = ref.putFile(await _compressVideo(videoPath));
+    UploadTask uploadTask = ref.putFile(File(await _compressVideo(videoPath)));
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;
@@ -35,7 +37,6 @@ class UploadVideoController extends GetxController {
   // * Upload image thumbnail to storage in firebase
   Future<String> _uploadImageToStorage(String id, String videoPath) async {
     Reference ref = firebaseStorage.ref().child("videos").child(id);
-
     UploadTask uploadTask = ref.putFile(await _getThumbnail(videoPath));
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
@@ -72,10 +73,9 @@ class UploadVideoController extends GetxController {
             video.toJson(),
           );
 
-      Get.back();
+      Get.offAll(const HomeScreen());
     } catch (e) {
       Get.snackbar("Error Uploading Video", e.toString());
-      print(e);
     }
   }
 }
